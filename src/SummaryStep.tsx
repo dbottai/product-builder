@@ -1,17 +1,25 @@
 import React, { Dispatch } from "react";
 import { Accessory, CarModel, Color } from "./types";
 
-function SummaryStep(props: {
+interface SummaryStepProps {
   step: number;
   model: CarModel;
   color: Color;
   accessories: { [key: string]: Accessory };
   setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
-}) {
+}
+
+function SummaryStep({
+  step,
+  model,
+  color,
+  accessories,
+  setAccessories,
+}: SummaryStepProps) {
   return (
     <li
       data-selection="summary"
-      className={`builder-step ${props.step === 4 ? "active" : ""}`}
+      className={`builder-step ${step === 4 ? "active" : ""}`}
     >
       <section className="cd-step-content">
         <header>
@@ -25,14 +33,14 @@ function SummaryStep(props: {
             <h2>Model</h2>
             <img
               src={
-                props.color.imageUrl !== ""
-                  ? require("./img/" + props.color.imageUrl)
+                color.imageUrl !== ""
+                  ? require("./img/" + color.imageUrl)
                   : require("./img/product01_col01.jpg")
               }
-              alt={props.model.name}
+              alt={model.name}
               className="product-preview"
             />
-            <h3>{props.model.name}</h3>
+            <h3>{model.name}</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Reprehenderit saepe facilis hic, unde, numquam vel. Blanditiis sed
@@ -43,10 +51,12 @@ function SummaryStep(props: {
           </li>
           <li data-summary="colors">
             <h2>Color</h2>
-            {props.color.id !== "" ? (
+            {color.id !== "" ? (
               <span className="summary-color">
-                <em className="color-swatch" data-color={props.color.id}></em>
-                <em className="color-label">{props.color.name}</em>
+                <em className="color-swatch" data-color={color.id}></em>
+                <em className="color-label">
+                  {color.name + " - $" + color.price.toLocaleString()}
+                </em>
               </span>
             ) : (
               ""
@@ -54,23 +64,18 @@ function SummaryStep(props: {
           </li>
           <li data-summary="accessories">
             <h2>Accessories</h2>
-            {Object.keys(props.accessories).length === 0 ? (
+            {Object.keys(accessories).length === 0 ? (
               <ul className="summary-accessories">
                 <li>
-                  <p>No Accessories selected;</p>
+                  <p>No Accessories selected</p>
                 </li>
               </ul>
             ) : (
               <ul className="summary-accessories">
-                {Object.keys(props.accessories).map(function (accessory) {
+                {Object.keys(accessories).map(function (accessory) {
                   return (
                     <li key={accessory}>
-                      <p>
-                        {props.accessories[accessory].name +
-                          " ($" +
-                          props.accessories[accessory].price +
-                          ")"}
-                      </p>
+                      <p>{accessories[accessory].name}</p>
                     </li>
                   );
                 })}
