@@ -3,18 +3,26 @@ import React, { Dispatch, useEffect } from "react";
 import { I3_MODEL, I8_MODEL, i3Accessories, i8Accessories } from "./constants";
 import { Accessory, CarModel } from "./types";
 
-function AccessoriesStep(props: {
+interface AccessoriesStepProps {
   step: number;
   model: CarModel;
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
   accessories: { [key: string]: Accessory };
   setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
-}) {
+}
+
+function AccessoriesStep({
+  step,
+  model,
+  totalPrice,
+  setTotalPrice,
+  accessories,
+  setAccessories,
+}: AccessoriesStepProps) {
   useEffect(() => {
-    props.setAccessories({});
-    console.log(props.accessories);
-  }, [props.model]);
+    setAccessories({});
+  }, [model, setAccessories]);
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
 
@@ -26,10 +34,10 @@ function AccessoriesStep(props: {
 
     if (button.classList.contains("selected")) {
       if (button.dataset.id !== undefined) {
-        delete props.accessories[button.dataset.id];
+        delete accessories[button.dataset.id];
       }
-      props.setTotalPrice(
-        props.totalPrice -
+      setTotalPrice(
+        totalPrice -
           parseInt(
             button.dataset.price !== undefined ? button.dataset.price : "0"
           )
@@ -41,13 +49,13 @@ function AccessoriesStep(props: {
           price: parseInt(price),
         };
 
-        props.setAccessories({
-          ...props.accessories,
+        setAccessories({
+          ...accessories,
           ...{ [id]: selectedAccessory },
         });
 
-        props.setTotalPrice(
-          props.totalPrice +
+        setTotalPrice(
+          totalPrice +
             parseInt(
               button.dataset.price !== undefined ? button.dataset.price : "0"
             )
@@ -59,7 +67,7 @@ function AccessoriesStep(props: {
   return (
     <li
       data-selection="accessories"
-      className={`builder-step ${props.step === 3 ? "active" : ""}`}
+      className={`builder-step ${step === 3 ? "active" : ""}`}
     >
       <section className="cd-step-content">
         <header>
@@ -69,14 +77,14 @@ function AccessoriesStep(props: {
           </span>
         </header>
         <ul className="accessories-list options-list">
-          {props.model.id === I3_MODEL
+          {model.id === I3_MODEL
             ? Object.keys(i3Accessories).map(function (accessory) {
                 return (
                   <li
                     onClick={listClickHandler}
                     key={I3_MODEL + i3Accessories[accessory].name}
                     className={`js-option ${
-                      props.accessories[accessory] ? "selected" : ""
+                      accessories[accessory] ? "selected" : ""
                     }`}
                     data-id={accessory}
                     data-price={i3Accessories[accessory].price}
@@ -96,7 +104,7 @@ function AccessoriesStep(props: {
                     onClick={listClickHandler}
                     key={I8_MODEL + i8Accessories[accessory].name}
                     className={`js-option ${
-                      props.accessories[accessory] ? "selected" : ""
+                      accessories[accessory] ? "selected" : ""
                     }`}
                     data-id={accessory}
                     data-price={i8Accessories[accessory].price}

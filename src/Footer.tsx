@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { CarModel, Color } from "./types";
 
-function Footer(props: {
+interface FooterProps {
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
   model: CarModel;
@@ -11,33 +11,45 @@ function Footer(props: {
   step: number;
   setStep: Dispatch<React.SetStateAction<number>>;
   color: Color;
-}) {
+}
+
+function Footer({
+  totalPrice,
+  setTotalPrice,
+  model,
+  setModel,
+  showAlert,
+  setShowAlert,
+  step,
+  setStep,
+  color,
+}: FooterProps) {
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.stopPropagation();
     event.preventDefault();
 
     const button: HTMLLIElement = event.currentTarget;
 
-    if (props.model.id !== "") {
-      props.setStep(
+    if (model.id !== "") {
+      setStep(
         parseInt(button.dataset.step !== undefined ? button.dataset.step : "1")
       );
     } else {
-      props.setShowAlert(true);
+      setShowAlert(true);
     }
   };
 
   return (
     <footer
-      className={`cd-builder-footer ${props.step === 1 ? "step-1" : ""} ${
-        props.model.id === "" ? "disabled" : ""
-      } ${props.showAlert ? "show-alert" : ""}`}
+      className={`cd-builder-footer ${step === 1 ? "step-1" : ""} ${
+        model.id === "" ? "disabled" : ""
+      } ${showAlert ? "show-alert" : ""}`}
     >
       <div className="selected-product">
         <img
           src={
-            props.color.imageUrl !== ""
-              ? require("./img/" + props.color.imageUrl)
+            color.imageUrl !== ""
+              ? require("./img/" + color.imageUrl)
               : require("./img/product01_col01.jpg")
           }
           alt="Product preview"
@@ -45,7 +57,7 @@ function Footer(props: {
         <div className="tot-price">
           <span>Total</span>
           <span className="total">
-            $<b>{props.totalPrice}</b>
+            $<b>{totalPrice}</b>
           </span>
         </div>
       </div>
@@ -56,8 +68,8 @@ function Footer(props: {
               <li
                 data-step="2"
                 onClick={listClickHandler}
-                className={`${props.step === 1 ? "visible" : ""} ${
-                  props.step > 1 ? "visible visited" : ""
+                className={`${step === 1 ? "visible" : ""} ${
+                  step > 1 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Colors</a>
@@ -65,8 +77,8 @@ function Footer(props: {
               <li
                 data-step="3"
                 onClick={listClickHandler}
-                className={`${props.step === 2 ? "visible" : ""} ${
-                  props.step > 2 ? "visible visited" : ""
+                className={`${step === 2 ? "visible" : ""} ${
+                  step > 2 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Accessories</a>
@@ -74,13 +86,13 @@ function Footer(props: {
               <li
                 data-step="4"
                 onClick={listClickHandler}
-                className={`${props.step === 3 ? "visible" : ""} ${
-                  props.step > 3 ? "visible visited" : ""
+                className={`${step === 3 ? "visible" : ""} ${
+                  step > 3 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Summary</a>
               </li>
-              <li className={`buy ${props.step === 4 ? "visible" : ""}`}>
+              <li className={`buy ${step === 4 ? "visible" : ""}`}>
                 <a href="#0">Buy Now</a>
               </li>
             </ul>
@@ -90,8 +102,8 @@ function Footer(props: {
               <li
                 onClick={listClickHandler}
                 data-step="1"
-                className={`${props.step === 2 ? "visible" : ""} ${
-                  props.step > 2 ? "visible visited" : ""
+                className={`${step === 2 ? "visible" : ""} ${
+                  step > 2 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Models</a>
@@ -99,8 +111,8 @@ function Footer(props: {
               <li
                 onClick={listClickHandler}
                 data-step="2"
-                className={`${props.step === 3 ? "visible" : ""} ${
-                  props.step > 3 ? "visible visited" : ""
+                className={`${step === 3 ? "visible" : ""} ${
+                  step > 3 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Colors</a>
@@ -108,8 +120,8 @@ function Footer(props: {
               <li
                 onClick={listClickHandler}
                 data-step="3"
-                className={`${props.step === 4 ? "visible" : ""} ${
-                  props.step > 4 ? "visible visited" : ""
+                className={`${step === 4 ? "visible" : ""} ${
+                  step > 4 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Accessories</a>

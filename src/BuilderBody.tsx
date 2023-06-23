@@ -6,7 +6,7 @@ import AccessoriesStep from "./AccessoriesStep";
 import SummaryStep from "./SummaryStep";
 import { Accessory, CarModel, Color } from "./types";
 
-function BuilderBody(props: {
+interface BuilderBodyProps {
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
   model: CarModel;
@@ -17,42 +17,55 @@ function BuilderBody(props: {
   setColor: Dispatch<React.SetStateAction<Color>>;
   accessories: { [key: string]: Accessory };
   setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
-}) {
+}
+
+function BuilderBody({
+  totalPrice,
+  setTotalPrice,
+  model,
+  setModel,
+  setShowAlert,
+  step,
+  color,
+  setColor,
+  accessories,
+  setAccessories,
+}: BuilderBodyProps) {
   return (
     <div className="cd-builder-steps">
       <ul>
         <ModelStep
           totalPrice={0}
-          setTotalPrice={props.setTotalPrice}
-          model={props.model}
-          setModel={props.setModel}
-          setShowAlert={props.setShowAlert}
-          step={props.step}
-          color={props.color}
-          setColor={props.setColor}
+          setTotalPrice={setTotalPrice}
+          model={model}
+          setModel={setModel}
+          setShowAlert={setShowAlert}
+          step={step}
+          color={color}
+          setColor={setColor}
         />
         <ColorsStep
-          step={props.step}
-          model={props.model}
-          color={props.color}
-          setColor={props.setColor}
-          totalPrice={props.totalPrice}
-          setTotalPrice={props.setTotalPrice}
+          step={step}
+          model={model}
+          color={color}
+          setColor={setColor}
+          totalPrice={totalPrice}
+          setTotalPrice={setTotalPrice}
         />
         <AccessoriesStep
-          step={props.step}
-          model={props.model}
-          totalPrice={props.totalPrice}
-          setTotalPrice={props.setTotalPrice}
-          accessories={props.accessories}
-          setAccessories={props.setAccessories}
+          step={step}
+          model={model}
+          totalPrice={totalPrice}
+          setTotalPrice={setTotalPrice}
+          accessories={accessories}
+          setAccessories={setAccessories}
         />
         <SummaryStep
-          step={props.step}
-          model={props.model}
-          color={props.color}
-          accessories={props.accessories}
-          setAccessories={props.setAccessories}
+          step={step}
+          model={model}
+          color={color}
+          accessories={accessories}
+          setAccessories={setAccessories}
         />
       </ul>
     </div>

@@ -64,7 +64,7 @@ function SummaryStep(props: {
               <ul className="summary-accessories">
                 {Object.keys(props.accessories).map(function (accessory) {
                   return (
-                    <li>
+                    <li key={accessory}>
                       <p>
                         {props.accessories[accessory].name +
                           " ($" +

@@ -11,7 +11,7 @@ import {
   i8DefaultColor,
 } from "./constants";
 
-function ModelStep(props: {
+interface ModelStepProps {
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
   model: CarModel;
@@ -20,7 +20,17 @@ function ModelStep(props: {
   step: number;
   color: Color;
   setColor: Dispatch<React.SetStateAction<Color>>;
-}) {
+}
+function ModelStep({
+  totalPrice,
+  setTotalPrice,
+  model,
+  setModel,
+  setShowAlert,
+  step,
+  color,
+  setColor,
+}: ModelStepProps) {
   const modelOptionClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -28,10 +38,10 @@ function ModelStep(props: {
     const button: HTMLLIElement = event.currentTarget;
 
     if (button.classList.contains("selected")) {
-      props.setModel(emptyCarModel);
-      props.setColor(emptyColor);
-      props.setShowAlert(false);
-      props.setTotalPrice(0);
+      setModel(emptyCarModel);
+      setColor(emptyColor);
+      setShowAlert(false);
+      setTotalPrice(0);
     } else {
       const price: number =
         button.dataset.price !== undefined ? parseInt(button.dataset.price) : 0;
@@ -45,19 +55,19 @@ function ModelStep(props: {
       };
 
       if (selectedModel.id === I3_MODEL) {
-        props.setColor(i3DefaultColor);
+        setColor(i3DefaultColor);
       } else if (selectedModel.id === I8_MODEL) {
-        props.setColor(i8DefaultColor);
+        setColor(i8DefaultColor);
       }
 
-      props.setModel(selectedModel);
+      setModel(selectedModel);
     }
   };
 
   return (
     <li
       data-selection="models"
-      className={`builder-step ${props.step === 1 ? "active" : ""}`}
+      className={`builder-step ${step === 1 ? "active" : ""}`}
     >
       <section className="cd-step-content">
         <header>
@@ -73,7 +83,7 @@ function ModelStep(props: {
                 key={carModel.id}
                 onClick={modelOptionClickHandler}
                 className={`js-option js-radio ${
-                  carModel.id === props.model.id ? "loaded selected" : ""
+                  carModel.id === model.id ? "loaded selected" : ""
                 }`}
                 data-name={carModel.name}
                 data-price={carModel.price}

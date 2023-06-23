@@ -10,24 +10,33 @@ import {
 } from "./constants";
 import { CarModel, Color } from "./types";
 
-function ColorsStep(props: {
+interface ColorStepsProps {
   step: number;
   model: CarModel;
   color: Color;
   setColor: Dispatch<React.SetStateAction<Color>>;
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
-}) {
+}
+
+function ColorsStep({
+  step,
+  model,
+  color,
+  setColor,
+  totalPrice,
+  setTotalPrice,
+}: ColorStepsProps) {
   useEffect(() => {
-    if (props.color.id !== "") {
-      props.setColor(props.color);
-    } else if (props.model.id === I3_MODEL) {
-      props.setColor(i3DefaultColor);
-    } else if (props.model.id === I8_MODEL) {
-      props.setColor(i8DefaultColor);
+    if (color.id !== "") {
+      setColor(color);
+    } else if (model.id === I3_MODEL) {
+      setColor(i3DefaultColor);
+    } else if (model.id === I8_MODEL) {
+      setColor(i8DefaultColor);
     }
-    props.setTotalPrice(props.model.price + props.color.price);
-  }, [props.color, props.model]);
+    setTotalPrice(model.price + color.price);
+  }, [color, model, setColor, setTotalPrice]);
 
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
@@ -35,7 +44,7 @@ function ColorsStep(props: {
     const button: HTMLLIElement = event.currentTarget;
 
     if (!button.classList.contains("selected")) {
-      const prevColorPrice = props.color.price;
+      const prevColorPrice = color.price;
       const selectedColor: Color = {
         id:
           button.dataset.modelcolor !== undefined
@@ -48,9 +57,9 @@ function ColorsStep(props: {
             : 0,
         imageUrl: button.dataset.src !== undefined ? button.dataset.src : "",
       };
-      props.setColor(selectedColor);
-      props.setTotalPrice(
-        props.totalPrice -
+      setColor(selectedColor);
+      setTotalPrice(
+        totalPrice -
           prevColorPrice +
           parseInt(
             button.dataset.price !== undefined ? button.dataset.price : "0"
@@ -62,7 +71,7 @@ function ColorsStep(props: {
   return (
     <li
       data-selection="colors"
-      className={`builder-step ${props.step === 2 ? "active" : ""}`}
+      className={`builder-step ${step === 2 ? "active" : ""}`}
     >
       <section className="cd-step-content">
         <header>
@@ -72,29 +81,29 @@ function ColorsStep(props: {
           </span>
         </header>
         <ul className="cd-product-previews">
-          {props.model.id === "product-01"
-            ? i3Colors.map(function (color) {
+          {model.id === "product-01"
+            ? i3Colors.map(function (colorEl) {
                 return (
                   <li
-                    key={I3_MODEL + color.id}
-                    className={color.id === props.color.id ? "selected" : ""}
+                    key={I3_MODEL + colorEl.id}
+                    className={colorEl.id === color.id ? "selected" : ""}
                   >
                     <img
-                      src={require("./img/" + color.imageUrl)}
+                      src={require("./img/" + colorEl.imageUrl)}
                       alt="Product Preview"
                       className="product-preview"
                     />
                   </li>
                 );
               })
-            : i8Colors.map(function (color) {
+            : i8Colors.map(function (colorEl) {
                 return (
                   <li
-                    key={I8_MODEL + color.id}
-                    className={color.id === props.color.id ? "selected" : ""}
+                    key={I8_MODEL + colorEl.id}
+                    className={colorEl.id === color.id ? "selected" : ""}
                   >
                     <img
-                      src={require("./img/" + color.imageUrl)}
+                      src={require("./img/" + colorEl.imageUrl)}
                       alt="Product Preview"
                       className="product-preview"
                     />
@@ -103,39 +112,39 @@ function ColorsStep(props: {
               })}
         </ul>
         <ul className="cd-product-customizer">
-          {props.model.id === "product-01"
-            ? i3Colors.map(function (color) {
+          {model.id === "product-01"
+            ? i3Colors.map(function (colorEl) {
                 return (
                   <li
                     onClick={listClickHandler}
-                    data-modelcolor={color.id}
-                    key={I3_MODEL + color.id}
-                    data-name={color.name}
-                    data-content={color.name + " - $" + color.price}
-                    data-price={color.price}
-                    data-src={color.imageUrl}
-                    className={color.id === props.color.id ? "selected" : ""}
+                    data-modelcolor={colorEl.id}
+                    key={I3_MODEL + colorEl.id}
+                    data-name={colorEl.name}
+                    data-content={colorEl.name + " - $" + colorEl.price}
+                    data-price={colorEl.price}
+                    data-src={colorEl.imageUrl}
+                    className={color.id === colorEl.id ? "selected" : ""}
                   >
-                    <a data-color={color.id} href="#0">
-                      {color.name + " - $" + color.price}
+                    <a data-color={colorEl.id} href="#0">
+                      {colorEl.name + " - $" + colorEl.price}
                     </a>
                   </li>
                 );
               })
-            : i8Colors.map(function (color) {
+            : i8Colors.map(function (colorEl) {
                 return (
                   <li
                     onClick={listClickHandler}
-                    key={I8_MODEL + color.id}
-                    data-name={color.name}
-                    data-modelcolor={color.id}
-                    data-content={color.name + " - $" + color.price}
-                    data-price={color.price}
-                    data-src={color.imageUrl}
-                    className={color.id === props.color.id ? "selected" : ""}
+                    key={I8_MODEL + colorEl.id}
+                    data-name={colorEl.name}
+                    data-modelcolor={colorEl.id}
+                    data-content={colorEl.name + " - $" + colorEl.price}
+                    data-price={colorEl.price}
+                    data-src={colorEl.imageUrl}
+                    className={color.id === colorEl.id ? "selected" : ""}
                   >
-                    <a data-color={color.id} href="#0">
-                      {color.name + " - $" + color.price}
+                    <a data-color={colorEl.id} href="#0">
+                      {colorEl.name + " - $" + colorEl.price}
                     </a>
                   </li>
                 );
