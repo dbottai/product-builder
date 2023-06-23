@@ -1,20 +1,47 @@
 import React, { Dispatch } from "react";
-import product from "./img/product01_col01.jpg";
+import { CarModel, Color } from "./types";
 
 function Footer(props: {
   totalPrice: number;
   setTotalPrice: Dispatch<React.SetStateAction<number>>;
-  clickedButton: string | undefined;
-  setClickedButton: Dispatch<React.SetStateAction<string | undefined>>;
+  model: CarModel;
+  setModel: Dispatch<React.SetStateAction<CarModel>>;
+  showAlert: boolean;
+  setShowAlert: Dispatch<React.SetStateAction<boolean>>;
+  step: number;
+  setStep: Dispatch<React.SetStateAction<number>>;
+  color: Color;
 }) {
+  const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const button: HTMLLIElement = event.currentTarget;
+
+    if (props.model.id !== "") {
+      props.setStep(
+        parseInt(button.dataset.step !== undefined ? button.dataset.step : "1")
+      );
+    } else {
+      props.setShowAlert(true);
+    }
+  };
+
   return (
     <footer
-      className={`cd-builder-footer step-1 ${
-        props.clickedButton === undefined ? "disabled" : ""
-      }`}
+      className={`cd-builder-footer ${props.step === 1 ? "step-1" : ""} ${
+        props.model.id === "" ? "disabled" : ""
+      } ${props.showAlert ? "show-alert" : ""}`}
     >
       <div className="selected-product">
-        <img src={product} alt="Product preview" />
+        <img
+          src={
+            props.color.imageUrl !== ""
+              ? require("./img/" + props.color.imageUrl)
+              : require("./img/product01_col01.jpg")
+          }
+          alt="Product preview"
+        />
         <div className="tot-price">
           <span>Total</span>
           <span className="total">
@@ -26,32 +53,65 @@ function Footer(props: {
         <ul>
           <li className="next nav-item">
             <ul>
-              <li className="visible">
+              <li
+                data-step="2"
+                onClick={listClickHandler}
+                className={`${props.step === 1 ? "visible" : ""} ${
+                  props.step > 1 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Colors</a>
               </li>
-              <li className="">
+              <li
+                data-step="3"
+                onClick={listClickHandler}
+                className={`${props.step === 2 ? "visible" : ""} ${
+                  props.step > 2 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Accessories</a>
               </li>
-              <li>
+              <li
+                data-step="4"
+                onClick={listClickHandler}
+                className={`${props.step === 3 ? "visible" : ""} ${
+                  props.step > 3 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Summary</a>
               </li>
-              <li className="buy">
+              <li className={`buy ${props.step === 4 ? "visible" : ""}`}>
                 <a href="#0">Buy Now</a>
               </li>
             </ul>
           </li>
           <li className="prev nav-item">
             <ul>
-              <li className="visible">
+              <li
+                onClick={listClickHandler}
+                data-step="1"
+                className={`${props.step === 2 ? "visible" : ""} ${
+                  props.step > 2 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Models</a>
               </li>
-              <li className="">
-                <a href="#0">Models</a>
-              </li>
-              <li>
+              <li
+                onClick={listClickHandler}
+                data-step="2"
+                className={`${props.step === 3 ? "visible" : ""} ${
+                  props.step > 3 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Colors</a>
               </li>
-              <li>
+              <li
+                onClick={listClickHandler}
+                data-step="3"
+                className={`${props.step === 4 ? "visible" : ""} ${
+                  props.step > 4 ? "visible visited" : ""
+                } `}
+              >
                 <a href="#0">Accessories</a>
               </li>
             </ul>

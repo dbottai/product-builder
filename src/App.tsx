@@ -4,30 +4,49 @@ import "./App.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import BuilderBody from "./BuilderBody";
-import ProductSteps from "./ProductSteps";
+import { Accessory, CarModel, Color } from "./types";
+import { emptyCarModel, emptyColor } from "./constants";
 
 function App() {
+  const [step, setStep] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [clickedButton, setClickedButton] = useState<string | undefined>(
-    undefined
+  const [model, setModel] = useState<CarModel>(emptyCarModel);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [color, setColor] = useState<Color>(emptyColor);
+  const [accessories, setAccessories] = useState<{ [key: string]: Accessory }>(
+    {}
   );
-
-  console.log(ProductSteps["product-1"]);
 
   return (
     <div className="cd-product-builder">
-      <Header />
+      <Header
+        model={model}
+        step={step}
+        setStep={setStep}
+        setShowAlert={setShowAlert}
+      />
       <BuilderBody
         totalPrice={totalPrice}
         setTotalPrice={setTotalPrice}
-        clickedButton={clickedButton}
-        setClickedButton={setClickedButton}
+        model={model}
+        setModel={setModel}
+        setShowAlert={setShowAlert}
+        step={step}
+        color={color}
+        setColor={setColor}
+        accessories={accessories}
+        setAccessories={setAccessories}
       />
       <Footer
         totalPrice={totalPrice}
         setTotalPrice={setTotalPrice}
-        clickedButton={clickedButton}
-        setClickedButton={setClickedButton}
+        model={model}
+        setModel={setModel}
+        showAlert={showAlert}
+        setShowAlert={setShowAlert}
+        step={step}
+        setStep={setStep}
+        color={color}
       />
     </div>
   );
