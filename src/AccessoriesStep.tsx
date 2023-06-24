@@ -1,6 +1,12 @@
 import React, { Dispatch, useEffect } from "react";
 
-import { I3_MODEL, I8_MODEL, StepsDirection, i3Accessories, i8Accessories } from "./constants";
+import {
+  I3_MODEL,
+  I8_MODEL,
+  StepsDirection,
+  i3Accessories,
+  i8Accessories,
+} from "./constants";
 import { Accessory, CarModel, Step } from "./types";
 
 interface AccessoriesStepProps {
@@ -52,9 +58,13 @@ function AccessoriesStep({
     <li
       data-selection="accessories"
       className={`builder-step ${step.number === 3 ? "active" : ""} ${
-        step.number === 3 && step.direction === StepsDirection.Left ? "back" : ""
+        step.number === 3 && step.direction === StepsDirection.Left
+          ? "back"
+          : ""
       } ${
-        step.number > 3 && step.direction === StepsDirection.Right ? "move-left" : ""
+        step.number > 3 && step.direction === StepsDirection.Right
+          ? "move-left"
+          : ""
       }`}
     >
       <section className="cd-step-content">

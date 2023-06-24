@@ -7,8 +7,6 @@ import SummaryStep from "./SummaryStep";
 import { Accessory, CarModel, Color, Step } from "./types";
 
 interface BuilderBodyProps {
-  totalPrice: number;
-  setTotalPrice: Dispatch<React.SetStateAction<number>>;
   model: CarModel;
   setModel: Dispatch<React.SetStateAction<CarModel>>;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
@@ -20,8 +18,6 @@ interface BuilderBodyProps {
 }
 
 function BuilderBody({
-  totalPrice,
-  setTotalPrice,
   model,
   setModel,
   setShowAlert,
@@ -39,7 +35,7 @@ function BuilderBody({
           setModel={setModel}
           setShowAlert={setShowAlert}
           step={step}
-          setColor={setColor}
+          // setColor={setColor}
         />
         <ColorsStep
           step={step}
@@ -58,7 +54,6 @@ function BuilderBody({
           model={model}
           color={color}
           accessories={accessories}
-          setAccessories={setAccessories}
         />
       </ul>
     </div>

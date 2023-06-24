@@ -29,8 +29,6 @@ function App() {
         setShowAlert={setShowAlert}
       />
       <BuilderBody
-        totalPrice={totalPrice}
-        setTotalPrice={setTotalPrice}
         model={model}
         setModel={setModel}
         setShowAlert={setShowAlert}

@@ -1,16 +1,15 @@
 import React, { Dispatch } from "react";
 
-import { CarModel, Color, Step } from "./types";
-import { emptyCarModel, carModels, StepsDirection, emptyColor, i3DefaultColor, I3_MODEL, I8_MODEL, i8DefaultColor } from "./constants";
+import { CarModel, Step } from "./types";
+import { emptyCarModel, carModels, StepsDirection } from "./constants";
 
 interface ModelStepProps {
   model: CarModel;
   setModel: Dispatch<React.SetStateAction<CarModel>>;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  setColor: Dispatch<React.SetStateAction<Color>>;
   step: Step;
 }
-function ModelStep({ model, setModel, setShowAlert, step, setColor }: ModelStepProps) {
+function ModelStep({ model, setModel, setShowAlert, step }: ModelStepProps) {
   const modelOptionClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -19,7 +18,6 @@ function ModelStep({ model, setModel, setShowAlert, step, setColor }: ModelStepP
 
     if (button.classList.contains("selected")) {
       setModel(emptyCarModel);
-      setColor(emptyColor);
       setShowAlert(false);
     } else {
       const price: number =
@@ -32,12 +30,6 @@ function ModelStep({ model, setModel, setShowAlert, step, setColor }: ModelStepP
         imageUrl:
           button.dataset.image !== undefined ? button.dataset.image : "",
       };
-
-      if (selectedModel.id === I3_MODEL) {
-        setColor(i3DefaultColor);
-      } else if (selectedModel.id === I8_MODEL) {
-        setColor(i8DefaultColor);
-      }
 
       setModel(selectedModel);
       setShowAlert(false);

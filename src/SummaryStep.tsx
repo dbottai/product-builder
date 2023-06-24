@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React from "react";
 import { Accessory, CarModel, Color, Step } from "./types";
 
 interface SummaryStepProps {
@@ -6,16 +6,9 @@ interface SummaryStepProps {
   model: CarModel;
   color: Color;
   accessories: { [key: string]: Accessory };
-  setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
 }
 
-function SummaryStep({
-  step,
-  model,
-  color,
-  accessories,
-  setAccessories,
-}: SummaryStepProps) {
+function SummaryStep({ step, model, color, accessories }: SummaryStepProps) {
   return (
     <li
       data-selection="summary"

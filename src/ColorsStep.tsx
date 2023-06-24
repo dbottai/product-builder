@@ -21,14 +21,12 @@ interface ColorStepsProps {
 
 function ColorsStep({ step, model, color, setColor }: ColorStepsProps) {
   useEffect(() => {
-    if (color.id !== "") {
-      setColor(color);
-    } else if (model.id === I3_MODEL) {
+    if (model.id === I3_MODEL) {
       setColor(i3DefaultColor);
     } else if (model.id === I8_MODEL) {
       setColor(i8DefaultColor);
     } else setColor(emptyColor);
-  }, [color, model, setColor]);
+  }, [model, setColor]);
 
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
