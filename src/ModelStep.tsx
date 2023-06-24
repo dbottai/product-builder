@@ -1,36 +1,16 @@
 import React, { Dispatch } from "react";
 
-import { CarModel, Color } from "./types";
-import {
-  emptyCarModel,
-  carModels,
-  emptyColor,
-  I3_MODEL,
-  i3DefaultColor,
-  I8_MODEL,
-  i8DefaultColor,
-} from "./constants";
+import { CarModel, Color, Step } from "./types";
+import { emptyCarModel, carModels, StepsDirection, emptyColor, i3DefaultColor, I3_MODEL, I8_MODEL, i8DefaultColor } from "./constants";
 
 interface ModelStepProps {
-  totalPrice: number;
-  setTotalPrice: Dispatch<React.SetStateAction<number>>;
   model: CarModel;
   setModel: Dispatch<React.SetStateAction<CarModel>>;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  step: number;
-  color: Color;
   setColor: Dispatch<React.SetStateAction<Color>>;
+  step: Step;
 }
-function ModelStep({
-  totalPrice,
-  setTotalPrice,
-  model,
-  setModel,
-  setShowAlert,
-  step,
-  color,
-  setColor,
-}: ModelStepProps) {
+function ModelStep({ model, setModel, setShowAlert, step, setColor }: ModelStepProps) {
   const modelOptionClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -41,7 +21,6 @@ function ModelStep({
       setModel(emptyCarModel);
       setColor(emptyColor);
       setShowAlert(false);
-      setTotalPrice(0);
     } else {
       const price: number =
         button.dataset.price !== undefined ? parseInt(button.dataset.price) : 0;
@@ -61,13 +40,22 @@ function ModelStep({
       }
 
       setModel(selectedModel);
+      setShowAlert(false);
     }
   };
 
   return (
     <li
       data-selection="models"
-      className={`builder-step ${step === 1 ? "active" : ""}`}
+      className={`builder-step ${step.number === 1 ? "active" : ""} ${
+        step.number === 1 && step.direction === StepsDirection.Left
+          ? "back"
+          : ""
+      } ${
+        step.number > 1 && step.direction === StepsDirection.Right
+          ? "move-left"
+          : ""
+      }`}
     >
       <section className="cd-step-content">
         <header>

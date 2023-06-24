@@ -1,24 +1,40 @@
 import React, { Dispatch } from "react";
-import { CarModel } from "./types";
+import { CarModel, Step } from "./types";
+import { StepsDirection } from "./constants";
 
 interface HeaderProps {
   model: CarModel;
-  step: number;
-  setStep: Dispatch<React.SetStateAction<number>>;
+  step: Step;
+  setStep: Dispatch<React.SetStateAction<Step>>;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
 }
 
+const steps = [
+  { number: 1, href: "#models", title: "Models" },
+  { number: 2, href: "#colors", title: "Colors" },
+  { number: 3, href: "#accessories", title: "Accessories" },
+  { number: 4, href: "#summary", title: "Summary" },
+];
+
 function Header({ model, step, setStep, setShowAlert }: HeaderProps) {
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
-    event.stopPropagation();
     event.preventDefault();
 
     const button: HTMLLIElement = event.currentTarget;
 
     if (model.id !== "") {
-      setStep(
-        parseInt(button.dataset.step !== undefined ? button.dataset.step : "1")
+      const nextStepNumber = parseInt(
+        button.dataset.step !== undefined ? button.dataset.step : "1"
       );
+      const direction =
+        nextStepNumber > step.number
+          ? StepsDirection.Right
+          : StepsDirection.Left;
+      const nextStepItem: Step = {
+        number: nextStepNumber,
+        direction: direction,
+      };
+      setStep(nextStepItem);
     } else {
       setShowAlert(true);
     }
@@ -31,34 +47,18 @@ function Header({ model, step, setStep, setShowAlert }: HeaderProps) {
         className={`cd-builder-main-nav ${model.id !== "" ? "" : "disabled"}`}
       >
         <ul>
-          <li
-            data-step="1"
-            onClick={listClickHandler}
-            className={step === 1 ? "active" : ""}
-          >
-            <a href="#models">Models</a>
-          </li>
-          <li
-            data-step="2"
-            onClick={listClickHandler}
-            className={step === 2 ? "active" : ""}
-          >
-            <a href="#colors">Colors</a>
-          </li>
-          <li
-            data-step="3"
-            onClick={listClickHandler}
-            className={step === 3 ? "active" : ""}
-          >
-            <a href="#accessories">Accessories</a>
-          </li>
-          <li
-            data-step="4"
-            onClick={listClickHandler}
-            className={step === 4 ? "active" : ""}
-          >
-            <a href="#summary">Summary</a>
-          </li>
+          {steps.map(function (stepEl) {
+            return (
+              <li
+                key={stepEl.number}
+                data-step={stepEl.number}
+                onClick={listClickHandler}
+                className={step.number === stepEl.number ? "active" : ""}
+              >
+                <a href={stepEl.href}>{stepEl.title}</a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </header>

@@ -4,7 +4,7 @@ import ModelStep from "./ModelStep";
 import ColorsStep from "./ColorsStep";
 import AccessoriesStep from "./AccessoriesStep";
 import SummaryStep from "./SummaryStep";
-import { Accessory, CarModel, Color } from "./types";
+import { Accessory, CarModel, Color, Step } from "./types";
 
 interface BuilderBodyProps {
   totalPrice: number;
@@ -12,7 +12,7 @@ interface BuilderBodyProps {
   model: CarModel;
   setModel: Dispatch<React.SetStateAction<CarModel>>;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  step: number;
+  step: Step;
   color: Color;
   setColor: Dispatch<React.SetStateAction<Color>>;
   accessories: { [key: string]: Accessory };
@@ -35,13 +35,10 @@ function BuilderBody({
     <div className="cd-builder-steps">
       <ul>
         <ModelStep
-          totalPrice={0}
-          setTotalPrice={setTotalPrice}
           model={model}
           setModel={setModel}
           setShowAlert={setShowAlert}
           step={step}
-          color={color}
           setColor={setColor}
         />
         <ColorsStep
@@ -49,14 +46,10 @@ function BuilderBody({
           model={model}
           color={color}
           setColor={setColor}
-          totalPrice={totalPrice}
-          setTotalPrice={setTotalPrice}
         />
         <AccessoriesStep
           step={step}
           model={model}
-          totalPrice={totalPrice}
-          setTotalPrice={setTotalPrice}
           accessories={accessories}
           setAccessories={setAccessories}
         />

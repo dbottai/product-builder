@@ -1,3 +1,5 @@
+import { StepsDirection } from "./constants";
+
 export interface Color {
   id: string;
   name: string;
@@ -15,4 +17,9 @@ export interface CarModel {
 export interface Accessory {
   name: string;
   price: number;
+}
+
+export interface Step {
+  number: number;
+  direction: StepsDirection;
 }

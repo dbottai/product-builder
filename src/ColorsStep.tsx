@@ -3,30 +3,23 @@ import React, { Dispatch, useEffect } from "react";
 import {
   I3_MODEL,
   I8_MODEL,
+  StepsDirection,
+  emptyColor,
   i3Colors,
   i3DefaultColor,
   i8Colors,
   i8DefaultColor,
 } from "./constants";
-import { CarModel, Color } from "./types";
+import { CarModel, Color, Step } from "./types";
 
 interface ColorStepsProps {
-  step: number;
+  step: Step;
   model: CarModel;
   color: Color;
   setColor: Dispatch<React.SetStateAction<Color>>;
-  totalPrice: number;
-  setTotalPrice: Dispatch<React.SetStateAction<number>>;
 }
 
-function ColorsStep({
-  step,
-  model,
-  color,
-  setColor,
-  totalPrice,
-  setTotalPrice,
-}: ColorStepsProps) {
+function ColorsStep({ step, model, color, setColor }: ColorStepsProps) {
   useEffect(() => {
     if (color.id !== "") {
       setColor(color);
@@ -34,9 +27,8 @@ function ColorsStep({
       setColor(i3DefaultColor);
     } else if (model.id === I8_MODEL) {
       setColor(i8DefaultColor);
-    }
-    setTotalPrice(model.price + color.price);
-  }, [color, model, setColor, setTotalPrice]);
+    } else setColor(emptyColor);
+  }, [color, model, setColor]);
 
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
@@ -44,7 +36,6 @@ function ColorsStep({
     const button: HTMLLIElement = event.currentTarget;
 
     if (!button.classList.contains("selected")) {
-      const prevColorPrice = color.price;
       const selectedColor: Color = {
         id:
           button.dataset.modelcolor !== undefined
@@ -58,20 +49,21 @@ function ColorsStep({
         imageUrl: button.dataset.src !== undefined ? button.dataset.src : "",
       };
       setColor(selectedColor);
-      setTotalPrice(
-        totalPrice -
-          prevColorPrice +
-          parseInt(
-            button.dataset.price !== undefined ? button.dataset.price : "0"
-          )
-      );
     }
   };
 
   return (
     <li
       data-selection="colors"
-      className={`builder-step ${step === 2 ? "active" : ""}`}
+      className={`builder-step ${step.number === 2 ? "active" : ""} ${
+        step.number === 2 && step.direction === StepsDirection.Left
+          ? "back"
+          : ""
+      } ${
+        step.number > 2 && step.direction === StepsDirection.Right
+          ? "move-left"
+          : ""
+      }`}
     >
       <section className="cd-step-content">
         <header>
@@ -81,7 +73,7 @@ function ColorsStep({
           </span>
         </header>
         <ul className="cd-product-previews">
-          {model.id === "product-01"
+          {model.id === I3_MODEL
             ? i3Colors.map(function (colorEl) {
                 return (
                   <li
@@ -112,7 +104,7 @@ function ColorsStep({
               })}
         </ul>
         <ul className="cd-product-customizer">
-          {model.id === "product-01"
+          {model.id === I3_MODEL
             ? i3Colors.map(function (colorEl) {
                 return (
                   <li

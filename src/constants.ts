@@ -3,6 +3,12 @@ import { Accessory, CarModel, Color } from "./types";
 export const I3_MODEL: string = "product-01";
 export const I8_MODEL: string = "product-02";
 
+export const enum StepsDirection {
+  None = "NONE",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+
 export const carModels: CarModel[] = [
   {
     id: I3_MODEL,

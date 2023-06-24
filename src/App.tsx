@@ -4,11 +4,14 @@ import "./App.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import BuilderBody from "./BuilderBody";
-import { Accessory, CarModel, Color } from "./types";
-import { emptyCarModel, emptyColor } from "./constants";
+import { Accessory, CarModel, Color, Step } from "./types";
+import { StepsDirection, emptyCarModel, emptyColor } from "./constants";
 
 function App() {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<Step>({
+    number: 1,
+    direction: StepsDirection.None,
+  });
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [model, setModel] = useState<CarModel>(emptyCarModel);
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -47,6 +50,9 @@ function App() {
         step={step}
         setStep={setStep}
         color={color}
+        setColor={setColor}
+        accessories={accessories}
+        setAccessories={setAccessories}
       />
     </div>
   );

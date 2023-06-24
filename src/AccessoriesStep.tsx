@@ -1,13 +1,11 @@
 import React, { Dispatch, useEffect } from "react";
 
-import { I3_MODEL, I8_MODEL, i3Accessories, i8Accessories } from "./constants";
-import { Accessory, CarModel } from "./types";
+import { I3_MODEL, I8_MODEL, StepsDirection, i3Accessories, i8Accessories } from "./constants";
+import { Accessory, CarModel, Step } from "./types";
 
 interface AccessoriesStepProps {
-  step: number;
+  step: Step;
   model: CarModel;
-  totalPrice: number;
-  setTotalPrice: Dispatch<React.SetStateAction<number>>;
   accessories: { [key: string]: Accessory };
   setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
 }
@@ -15,8 +13,6 @@ interface AccessoriesStepProps {
 function AccessoriesStep({
   step,
   model,
-  totalPrice,
-  setTotalPrice,
   accessories,
   setAccessories,
 }: AccessoriesStepProps) {
@@ -34,14 +30,9 @@ function AccessoriesStep({
 
     if (button.classList.contains("selected")) {
       if (button.dataset.id !== undefined) {
-        delete accessories[button.dataset.id];
+        const { [button.dataset.id]: deleted, ...rest } = accessories;
+        setAccessories(rest);
       }
-      setTotalPrice(
-        totalPrice -
-          parseInt(
-            button.dataset.price !== undefined ? button.dataset.price : "0"
-          )
-      );
     } else {
       if (id !== undefined && name !== undefined && price !== undefined) {
         const selectedAccessory = {
@@ -53,13 +44,6 @@ function AccessoriesStep({
           ...accessories,
           ...{ [id]: selectedAccessory },
         });
-
-        setTotalPrice(
-          totalPrice +
-            parseInt(
-              button.dataset.price !== undefined ? button.dataset.price : "0"
-            )
-        );
       }
     }
   };
@@ -67,7 +51,11 @@ function AccessoriesStep({
   return (
     <li
       data-selection="accessories"
-      className={`builder-step ${step === 3 ? "active" : ""}`}
+      className={`builder-step ${step.number === 3 ? "active" : ""} ${
+        step.number === 3 && step.direction === StepsDirection.Left ? "back" : ""
+      } ${
+        step.number > 3 && step.direction === StepsDirection.Right ? "move-left" : ""
+      }`}
     >
       <section className="cd-step-content">
         <header>

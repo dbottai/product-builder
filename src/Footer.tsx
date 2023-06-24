@@ -1,5 +1,6 @@
-import React, { Dispatch } from "react";
-import { CarModel, Color } from "./types";
+import React, { Dispatch, useEffect } from "react";
+import { Accessory, CarModel, Color, Step } from "./types";
+import { StepsDirection } from "./constants";
 
 interface FooterProps {
   totalPrice: number;
@@ -8,9 +9,12 @@ interface FooterProps {
   setModel: Dispatch<React.SetStateAction<CarModel>>;
   showAlert: boolean;
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  step: number;
-  setStep: Dispatch<React.SetStateAction<number>>;
+  step: Step;
+  setStep: Dispatch<React.SetStateAction<Step>>;
   color: Color;
+  setColor: Dispatch<React.SetStateAction<Color>>;
+  accessories: { [key: string]: Accessory };
+  setAccessories: Dispatch<React.SetStateAction<{ [key: string]: Accessory }>>;
 }
 
 function Footer({
@@ -23,17 +27,37 @@ function Footer({
   step,
   setStep,
   color,
+  setColor,
+  accessories,
+  setAccessories,
 }: FooterProps) {
+  useEffect(() => {
+    let accessoriesPrice = 0;
+
+    Object.keys(accessories).map(function (key) {
+      return (accessoriesPrice += accessories[key].price);
+    });
+    setTotalPrice(model.price + color.price + accessoriesPrice);
+  }, [accessories, color.price, model.price, setTotalPrice]);
+
   const listClickHandler = (event: React.MouseEvent<HTMLLIElement>) => {
-    event.stopPropagation();
     event.preventDefault();
 
     const button: HTMLLIElement = event.currentTarget;
 
     if (model.id !== "") {
-      setStep(
-        parseInt(button.dataset.step !== undefined ? button.dataset.step : "1")
+      const nextStepNumber = parseInt(
+        button.dataset.step !== undefined ? button.dataset.step : "1"
       );
+      const direction =
+        nextStepNumber > step.number
+          ? StepsDirection.Right
+          : StepsDirection.Left;
+      const nextStepItem: Step = {
+        number: nextStepNumber,
+        direction: direction,
+      };
+      setStep(nextStepItem);
     } else {
       setShowAlert(true);
     }
@@ -41,7 +65,7 @@ function Footer({
 
   return (
     <footer
-      className={`cd-builder-footer ${step === 1 ? "step-1" : ""} ${
+      className={`cd-builder-footer ${step.number === 1 ? "step-1" : ""} ${
         model.id === "" ? "disabled" : ""
       } ${showAlert ? "show-alert" : ""}`}
     >
@@ -68,8 +92,8 @@ function Footer({
               <li
                 data-step="2"
                 onClick={listClickHandler}
-                className={`${step === 1 ? "visible" : ""} ${
-                  step > 1 ? "visible visited" : ""
+                className={`${step.number === 1 ? "visible" : ""} ${
+                  step.number > 1 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Colors</a>
@@ -77,8 +101,8 @@ function Footer({
               <li
                 data-step="3"
                 onClick={listClickHandler}
-                className={`${step === 2 ? "visible" : ""} ${
-                  step > 2 ? "visible visited" : ""
+                className={`${step.number === 2 ? "visible" : ""} ${
+                  step.number > 2 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Accessories</a>
@@ -86,13 +110,13 @@ function Footer({
               <li
                 data-step="4"
                 onClick={listClickHandler}
-                className={`${step === 3 ? "visible" : ""} ${
-                  step > 3 ? "visible visited" : ""
+                className={`${step.number === 3 ? "visible" : ""} ${
+                  step.number > 3 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Summary</a>
               </li>
-              <li className={`buy ${step === 4 ? "visible" : ""}`}>
+              <li className={`buy ${step.number === 4 ? "visible" : ""}`}>
                 <a href="#0">Buy Now</a>
               </li>
             </ul>
@@ -102,8 +126,8 @@ function Footer({
               <li
                 onClick={listClickHandler}
                 data-step="1"
-                className={`${step === 2 ? "visible" : ""} ${
-                  step > 2 ? "visible visited" : ""
+                className={`${step.number === 2 ? "visible" : ""} ${
+                  step.number > 2 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Models</a>
@@ -111,8 +135,8 @@ function Footer({
               <li
                 onClick={listClickHandler}
                 data-step="2"
-                className={`${step === 3 ? "visible" : ""} ${
-                  step > 3 ? "visible visited" : ""
+                className={`${step.number === 3 ? "visible" : ""} ${
+                  step.number > 3 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Colors</a>
@@ -120,8 +144,8 @@ function Footer({
               <li
                 onClick={listClickHandler}
                 data-step="3"
-                className={`${step === 4 ? "visible" : ""} ${
-                  step > 4 ? "visible visited" : ""
+                className={`${step.number === 4 ? "visible" : ""} ${
+                  step.number > 4 ? "visible visited" : ""
                 } `}
               >
                 <a href="#0">Accessories</a>

@@ -1,8 +1,8 @@
 import React, { Dispatch } from "react";
-import { Accessory, CarModel, Color } from "./types";
+import { Accessory, CarModel, Color, Step } from "./types";
 
 interface SummaryStepProps {
-  step: number;
+  step: Step;
   model: CarModel;
   color: Color;
   accessories: { [key: string]: Accessory };
@@ -19,7 +19,7 @@ function SummaryStep({
   return (
     <li
       data-selection="summary"
-      className={`builder-step ${step === 4 ? "active" : ""}`}
+      className={`builder-step ${step.number === 4 ? "active" : ""} `}
     >
       <section className="cd-step-content">
         <header>
